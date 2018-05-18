@@ -1,19 +1,12 @@
-import nexusdk from 'nexusdk';
-import FileChangeListener from './FileChangeListener';
+import { wrapHook } from 'nexusdk';
+import * as fs from 'fs';
+import path from 'path';
 
-const listener = new FileChangeListener();
+export default wrapHook((properties, messages) => {
+  const { trigger } = messages;
+  const { path: location, recursive } = properties;
 
-nexusdk.on('start', ({ path, recursive }) => {
-  listener.setProperties({ path, recursive }, nexusdk.sendMessage);
-  listener.start();
+  const watcher = fs.watch(location, { recursive }, (action, filename) => {
+    trigger({ action, filename: path.join(location, filename), relative_filename: filename, time: new Date().toISOString() });
+  });
 });
-
-nexusdk.on('stop', () => {
-  listener.stop();
-});
-
-nexusdk.on('exit', () => {
-  listener.stop();
-  process.exit(1);
-});
-
