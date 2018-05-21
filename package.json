@@ -1,7 +1,7 @@
 {
   "name": "nexuscript-file-hook",
   "version": "1.0.0",
-  "description": "",
+  "description": "Notify Nexuscript of file changes",
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack --mode development",
@@ -15,5 +15,24 @@
   },
   "dependencies": {
     "nexusdk": "github:wizebin/nexusdk"
+  },
+  "nexuscript": {
+    "type": "hook",
+    "author": "nexuscript",
+    "price": "free",
+    "configuration": {
+      "path": {
+        "_type": "file",
+        "_options": {
+          "file": true,
+          "folder": true
+        }
+      },
+      "recursive": "bool"
+    },
+    "category": "file",
+    "build_command": "npm run build",
+    "dist_folder": "dist",
+    "dist_file": "dist/main.js"
   }
 }
